@@ -15,6 +15,7 @@ import {
   useState,
   useEffect
 } from 'react'
+import Description from './components/Description';
 
 
 
@@ -37,6 +38,8 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null)
   
   const [results, setResults] = useState([])
+  const [favs, setFavs] = useState([])
+  const [query, setQuery] = useState("")
 
 
 
@@ -53,11 +56,16 @@ function App() {
         <Switch>
           <Route
             exact path='/'
-            render={() => <Home results = {results} setResults={setResults} API_KEY = {API_KEY}/>}
+            render={() => <Home results = {results} setResults={setResults} favs = {favs} setFavs={setFavs} API_KEY = {API_KEY}
+            query = {query} setQuery={setQuery}/>}
             />
            <Route 
             path="/register"
             render={ props => <Register {...props} currentUser={ currentUser } setCurrentUser={ setCurrentUser }/> }
+          />
+           <Route 
+            path="/result"
+            render={ props => <Description results = {results} setResults={setResults} favs = {favs} setFavs={setFavs} API_KEY = {API_KEY}/>}
           />
 
           <Route 
