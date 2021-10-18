@@ -1,4 +1,4 @@
-
+import { variables } from "../Variables"
 import axios from "axios"
 import {
     useState,
@@ -35,18 +35,18 @@ export default function Home(props){
     
     //   props.setResults("")
 
-    console.log(props.results)
+   
     console.log(props.results)
 
     async function getback() {
         try{
-          const response = await axios.get(`localhost:8000/api/movies/`)
+          const response = await axios.get(variables.API_URL)
           console.log(response)
         //   props.setResults(response.data)
           
-          console.log(response.data)
-        } catch (err) {
-          console.log(err, "not working")
+          console.log(response) 
+        } catch (err) { 
+          console.log(err, "ughh")
         }
       } 
       getback()
