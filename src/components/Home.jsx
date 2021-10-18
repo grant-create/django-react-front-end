@@ -38,22 +38,21 @@ export default function Home(props){
    
     console.log(props.results)
 
-    async function getback() {
+    async function getinfoback() {
         try{
           const response = await axios.get(variables.API_URL)
           console.log(response)
         //   props.setResults(response.data)
           
-          console.log(response) 
+        //   console.log(response) 
         } catch (err) { 
-          console.log(err, "ughh")
+          console.log(err, "ughhhhh!")
         }
       } 
-      getback()
+      getinfoback()
       
 
-
- 
+     
 
 
 
