@@ -59,25 +59,7 @@ function App() {
             render={() => <Home results = {results} setResults={setResults} favs = {favs} setFavs={setFavs} API_KEY = {API_KEY}
             query = {query} setQuery={setQuery}/>}
             />
-           <Route 
-            path="/register"
-            render={ props => <Register {...props} currentUser={ currentUser } setCurrentUser={ setCurrentUser }/> }
-          />
-           <Route 
-            path="/result"
-            render={ props => <Description results = {results} setResults={setResults} favs = {favs} setFavs={setFavs} API_KEY = {API_KEY}/>}
-          />
-
-          <Route 
-            path="/login"
-            render={ props => <Login {...props} currentUser={ currentUser } setCurrentUser={ setCurrentUser }/> }
-          />
-
-          {/* eventually we will do a condintional render here */}
-          <Route 
-            path="/profile"
-            render={ props => currentUser ? <Profile {...props} results={results} currentUser={ currentUser } setCurrentUser={ setCurrentUser } /> : <Redirect to="/login"/> }
-          />
+           
 
         </Switch>
 

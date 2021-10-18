@@ -12,7 +12,7 @@ import Button from "@restart/ui/esm/Button"
 export default function Home(props){
 
     
-    
+    // Pulls data from OMDB API KEY whenever props.query is updated aka when typing in search bar
 
     useEffect (() => {
         async function getPost() {
@@ -33,11 +33,11 @@ export default function Home(props){
       console.log()
 
    
-    
+// ---------------------------------------------------------------
 
-// use useEffect to only pull the info on page load.
+// use useEffect to reload the info when it's updated.
 // also grabs the results from the postgres db
-
+let count = 0
     useEffect(() => {
         async function getinfoback() {
             try{
@@ -52,28 +52,45 @@ export default function Home(props){
         } 
 
         getinfoback()
-    }, [])
-    
+        // page updates when props.favs is changed 
+        console.log(count)
+    }, [count])
+
+
+   // ---------------------------------------------------------------
+
+   // TESTS
    console.log(props.favs)
    console.log(props.query)
    console.log(props.results)
 
-    // add the names to a new array as list items
+   // ---------------------------------------------------------------
+    // FROM BACKEND
+    // add the names and DB info to a new array as list items
     let allNames = props.favs.map((x, index) =>
-   
-    <li>
-        <ul>
-            <li><Image style={{}} src={x.image}/></li>
-            <li>{x.name}</li>
-            <li>{x.runtime}</li>
+            
+            <li>
+                <Image style={{}} src={x.image}/>
+                {x.name}
+                <br/>
+                {x.runtime}
+                <br/>
+                
+                <button onClick={(e) => handleDelete(e, x.id)}>Remove from favorites</button>
 
-        </ul>
-    </li>
-    )
+            </li>
+
+       
     
+    )
+    // ---------------------------------------------------------------
 
+    // how to only have the search items show up if they are present
+    
+    // need to define ahead of time
     let images, title, runtime
 
+    // if they exsist show them, otherwise show nothing.
     if(props.results){
 
 
@@ -89,22 +106,29 @@ export default function Home(props){
     // if not in favorites, it will add to db
     // if movie already in favorites, it will remove
 
+// ---------------------------------------------------------------
 
+// FAVORITE BUTTON
 
     async function handleFavorite(e, title, images, runtime) {
         e.preventDefault()
-        // console.log('add to faves')
+        
+        // USING COUNT TO RELOAD PAGE EVERY TIME NEW FAV ADDED
+        count ++
+        console.log("count", count)
 
         // check if movie is already in favorites
         let inFavorites = false
         let addDelete = 'add'
+
         // for(favorite of props.favs){
         //     if(favorite.name == title){
         //         inFavorites = True
         //     }
         // }
         // add the appropriate end to the put route
-        console.log(title, runtime)
+        // console.log(title, runtime)
+
         await axios.post(`http://127.0.0.1:8000/api/movies/`, 
         {name: title,
         runtime: runtime,
@@ -112,27 +136,62 @@ export default function Home(props){
     })
        
       }
+// ---------------------------------------------------------------
+// UNFAVORITE BUTTON
+
+async function handleDelete(e, id) {
+    e.preventDefault()
+    
+    // USING COUNT TO RELOAD PAGE EVERY TIME NEW FAV ADDED
+    count ++
+    console.log("count", count)
+
+    // check if movie is already in favorites
+    let inFavorites = false
+    let addDelete = 'add'
+
+    // add the appropriate end to the put route
+    // console.log(title, runtime)
+
+    await axios.delete(`http://127.0.0.1:8000/api/movies/${id}/`, 
+    {id: id})
+   
+  }
 
 
+
+
+
+
+
+
+
+// ---------------------------------------------------------------
 
 
       
     return(
-        <div>
+        <div className="main">
 
-            <h1>Hello</h1>
+            <h1>Your Favorites:</h1>
+            <div className='scrollable'>
+
             <ul>
                 {allNames}
 
             </ul>
-            <Form className="d-flex" >
+            </div>
+
+        <h3>Search for a movie</h3>
+    {/* search bar and button below */}
+    <Form className="d-flex searchbox" >
       <input
         type="search"
         value={props.query}
         onChange={(e) => props.setQuery(e.target.value)}
-        placeholder="Search"
+        placeholder="Type something here!"
         className="mr-2"
-        aria-label="Search"
+        aria-label="Search for Movies"
         onSubmit={(e) => e.preventDefault}
       />
       
@@ -147,8 +206,40 @@ export default function Home(props){
            <Image src={images}/>
            <button onClick={(e) => handleFavorite(e, title, images, runtime)}>Add to favorites</button>
            
+           
+        <style>{`
+        ul {
+            list-style-type: none;
+            display: flex;
+            margin-right: 1%;
+        }
 
+        li {
+            margin: 1%;
+        }
+        
+        .main{
+            margin-bottom: 10%;
+        }
+
+        Form{
+            display: grid;
+            justify-content: center;
+        }
+
+        .scrollable {
+            height: 100%; /* or any value */
+            overflow-y: auto;
+        }
+        
+        .searchbox{
+            margin: .5%
+        }
+
+        `}</style>
 
 
         </div>
     )}
+
+    
