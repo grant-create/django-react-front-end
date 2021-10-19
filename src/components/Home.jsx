@@ -1,5 +1,5 @@
 import { variables } from "../Variables"
-import {Container, Row, Col, Image, Form} from 'react-bootstrap'
+import {Container, Row, Col, Image, Form, } from 'react-bootstrap'
 import axios from "axios"
 import {
     useState,
@@ -82,7 +82,7 @@ let s =props.count
                 {x.runtime}
                 <br/>
                 
-                <button onClick={(e) => handleDelete(e, x.id)}>Remove from favorites</button>
+                <Button variant="outline-danger" onClick={(e) => handleDelete(e, x.id)}>Remove from favorites</Button>
 
             </li>
 
@@ -204,9 +204,11 @@ async function handleDelete(e, id) {
         <div className='searchresults'>
             
 
-           <button onClick={(e) => handleFavorite(e, title, images, runtime)}>Add to favorites</button>
+           <Button onClick={(e) => handleFavorite(e, title, images, runtime)}>Add to Favorites</Button>
             <br/>
+            <Link to={`/details/${title}`}>
            <h4>{title} </h4>
+            </Link>
            
            {runtime}
            <Image src={images}/>
