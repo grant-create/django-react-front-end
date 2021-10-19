@@ -15,7 +15,8 @@ import {
   useState,
   useEffect
 } from 'react'
-import Description from './components/Description';
+
+import Details from './components/Details';
 
 
 
@@ -36,10 +37,10 @@ function App() {
 
     // state holds user data if the user is logged in
   const [currentUser, setCurrentUser] = useState(null)
-  
   const [results, setResults] = useState([])
   const [favs, setFavs] = useState([])
   const [query, setQuery] = useState("")
+  const [count, setCount] = useState(0)
 
 
 
@@ -57,6 +58,11 @@ function App() {
           <Route
             exact path='/'
             render={() => <Home results = {results} setResults={setResults} favs = {favs} setFavs={setFavs} API_KEY = {API_KEY}
+            query = {query} setQuery={setQuery} count = {count} setCount={setCount}/>}
+            />
+          <Route
+            exact path='/details/:Title'
+            render={() => <Details results = {results} setResults={setResults} favs = {favs} setFavs={setFavs} API_KEY = {API_KEY}
             query = {query} setQuery={setQuery}/>}
             />
            

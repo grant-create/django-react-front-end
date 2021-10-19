@@ -1,6 +1,6 @@
 
 import {Nav, Navbar, Form, FormControl, Button, NavDropdown, Container} from 'react-bootstrap'
-import Description from './Description'
+
 import {useState} from 'react'
 import {Link, useHistory} from 'react-router-dom'
 
@@ -42,7 +42,7 @@ const loggedIn = (
     return(
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
   <Container>
-  <Navbar.Brand href="#home">Movie Favorites</Navbar.Brand>
+  <Navbar.Brand href="/">Movie Favorites</Navbar.Brand>
   <Navbar.Toggle aria-controls="responsive-navbar-nav" />
   <Navbar.Collapse id="responsive-navbar-nav">
     <Nav className="me-auto">

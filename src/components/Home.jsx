@@ -6,6 +6,7 @@ import {
     useEffect
   } from 'react'
 import Button from "@restart/ui/esm/Button"
+import { Link } from "react-router-dom"
 
  
 
@@ -37,7 +38,7 @@ export default function Home(props){
 
 // use useEffect to reload the info when it's updated.
 // also grabs the results from the postgres db
-let count = 0
+let s =props.count
     useEffect(() => {
         async function getinfoback() {
             try{
@@ -52,26 +53,31 @@ let count = 0
         } 
 
         getinfoback()
-        // page updates when props.favs is changed 
-        console.log(count)
-    }, [count])
+        // page updates when count is changed 
+        
+    }, [props.count])
 
 
    // ---------------------------------------------------------------
 
-   // TESTS
+   // TEST OUTPUT
    console.log(props.favs)
    console.log(props.query)
    console.log(props.results)
 
    // ---------------------------------------------------------------
-    // FROM BACKEND
+    // Display FROM BACKEND
+
+    // FAVORITES: 
+
     // add the names and DB info to a new array as list items
     let allNames = props.favs.map((x, index) =>
             
             <li>
-                <Image style={{}} src={x.image}/>
-                {x.name}
+                <Link to={`/details/${x.name}`}>
+                    <Image style={{}} src={x.image}/>
+                    {x.name}
+                </Link>
                 <br/>
                 {x.runtime}
                 <br/>
@@ -84,6 +90,7 @@ let count = 0
     
     )
     // ---------------------------------------------------------------
+
 
     // how to only have the search items show up if they are present
     
@@ -105,6 +112,7 @@ let count = 0
     // let user search for and favorite movie
     // if not in favorites, it will add to db
     // if movie already in favorites, it will remove
+    // add description page
 
 // ---------------------------------------------------------------
 
@@ -112,39 +120,41 @@ let count = 0
 
     async function handleFavorite(e, title, images, runtime) {
         e.preventDefault()
-        
-        // USING COUNT TO RELOAD PAGE EVERY TIME NEW FAV ADDED
-        count ++
-        console.log("count", count)
+        // USING COUNT AND S TO RELOAD PAGE EVERY TIME NEW FAV ADDED
+        s++
+        props.setCount(s)
+        console.log("count", props.count)
 
         // check if movie is already in favorites
         let inFavorites = false
-        let addDelete = 'add'
+        
 
-        // for(favorite of props.favs){
+        // for(let favorite of props.favs){
         //     if(favorite.name == title){
-        //         inFavorites = True
+        //         inFavorites = true
         //     }
         // }
-        // add the appropriate end to the put route
-        // console.log(title, runtime)
+        //add the appropriate end to the put route
+        console.log(title, runtime)
 
         await axios.post(`http://127.0.0.1:8000/api/movies/`, 
         {name: title,
         runtime: runtime,
         image: images
-    })
+        })
        
       }
 // ---------------------------------------------------------------
+
+
 // UNFAVORITE BUTTON
 
 async function handleDelete(e, id) {
     e.preventDefault()
-    
-    // USING COUNT TO RELOAD PAGE EVERY TIME NEW FAV ADDED
-    count ++
-    console.log("count", count)
+    // USING COUNT AND S TO RELOAD PAGE EVERY TIME NEW FAV ADDED
+    s++
+    props.setCount(s)
+    console.log("count", props.count)
 
     // check if movie is already in favorites
     let inFavorites = false
@@ -157,12 +167,6 @@ async function handleDelete(e, id) {
     {id: id})
    
   }
-
-
-
-
-
-
 
 
 
@@ -197,14 +201,16 @@ async function handleDelete(e, id) {
       
     </Form>
 
-        <div>
+        <div className='searchresults'>
             
-        </div>
 
-           {title}
+           <button onClick={(e) => handleFavorite(e, title, images, runtime)}>Add to favorites</button>
+            <br/>
+           <h4>{title} </h4>
+           
            {runtime}
            <Image src={images}/>
-           <button onClick={(e) => handleFavorite(e, title, images, runtime)}>Add to favorites</button>
+        </div>
            
            
         <style>{`
@@ -219,7 +225,7 @@ async function handleDelete(e, id) {
         }
         
         .main{
-            margin-bottom: 10%;
+            margin-bottom: 40%;
         }
 
         Form{
@@ -229,12 +235,21 @@ async function handleDelete(e, id) {
 
         .scrollable {
             height: 100%; /* or any value */
+            width: 100%;
             overflow-y: auto;
+            
+            
         }
         
         .searchbox{
             margin: .5%
         }
+
+        .searchresults{
+            display: grid;
+            justify-content: center;
+        }
+
 
         `}</style>
 
