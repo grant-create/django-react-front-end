@@ -72,7 +72,7 @@ console.log(props.results)
 
  // filter and map to find if movie is in db
 
- let isFavorite = "NOPE"
+ let isFavorite = "Nope"
     const filterMovies = props.favs.filter((movie) => {
         console.log(movie.name, pageName.Title)
         if (movie.name == pageName.Title){
